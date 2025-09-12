@@ -27,6 +27,7 @@ import com.alperenturker.myapplication.presentation.movie_detail.MovieDetailView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.material.icons.outlined.AddCircle
 
 private object Dark {
     val Bg = Color(0xFF000000)
@@ -128,7 +129,8 @@ fun MovieDetailScreen(
                             )
                             Spacer(Modifier.height(8.dp))
                             FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 Pill(Icons.Outlined.DateRange, m.Year.takeIfUseful())
                                 Pill(Icons.Outlined.Star, m.imdbRating.takeIfUseful()?.let { "$it / 10 IMDb" })
@@ -150,6 +152,7 @@ fun MovieDetailScreen(
                             modifier = Modifier.padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
+                            LabeledValue("Review", m.Plot.takeIfUseful(), Icons.Outlined.AddCircle)
                             LabeledValue("Director", m.Director.takeIfUseful(), Icons.Outlined.Person)
                             LabeledValue("Actors", m.Actors.takeIfUseful(), Icons.Outlined.Person)
                             LabeledValue("Country", m.Country.takeIfUseful(), Icons.Outlined.Person)
