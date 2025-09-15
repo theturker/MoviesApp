@@ -42,6 +42,12 @@ android {
 }
 
 dependencies {
+    //Modules
+    implementation(project(":domain"))
+    implementation(project(":core-common"))
+    implementation(project(":core-network"))
+    implementation(project(":data"))
+
     // Compose core
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

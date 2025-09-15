@@ -3,8 +3,8 @@ package com.alperenturker.myapplication.presentation.movies
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alperenturker.myapplication.domain.use_case.get_movies.GetMoviesUseCase
-import com.alperenturker.myapplication.util.Resource
+import com.alperenturker.core.common.util.Resource
+import com.alperenturker.domain.use_case.get_movies.GetMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -18,6 +18,7 @@ class MoviesViewModel @Inject constructor(
 
     private val _state = mutableStateOf<MoviesState>(MoviesState())
     val state: State<MoviesState> = _state
+
     private var job : Job? = null
 
     init {

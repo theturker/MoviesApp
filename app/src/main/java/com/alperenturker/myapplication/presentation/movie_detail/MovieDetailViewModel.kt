@@ -3,13 +3,13 @@ package com.alperenturker.myapplication.presentation.movie_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alperenturker.myapplication.domain.use_case.get_movie_detail.GetMovieDetailUseCase
 import com.alperenturker.myapplication.util.Constants.IMDB_ID
-import com.alperenturker.myapplication.util.Resource
 import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.compose.runtime.*
+import com.alperenturker.core.common.util.Resource
+import com.alperenturker.domain.use_case.get_movie_detail.GetMovieDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel

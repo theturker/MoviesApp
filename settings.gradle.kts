@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "CleanMovieApp"
 include(":app")
+include(":core-network")
+include(":data")
+include(":domain")
+include(":core-common")

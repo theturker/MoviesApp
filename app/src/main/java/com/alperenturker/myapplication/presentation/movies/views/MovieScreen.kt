@@ -25,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.alperenturker.myapplication.domain.model.Movie
 import com.alperenturker.myapplication.presentation.Screen
 import com.alperenturker.myapplication.presentation.movies.MoviesEvent
 import com.alperenturker.myapplication.presentation.movies.MoviesViewModel
@@ -37,6 +36,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.graphics.Color
+import com.alperenturker.domain.model.Movie
 
 private object Dark {
     val Bg = Color(0xFF000000)

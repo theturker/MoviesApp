@@ -35,7 +35,6 @@ private object Dark {
     val Surface2 = Color(0xFF161616)
     val OnBg = Color(0xFFEDEDED)
     val OnDim = Color(0xFFB5B5B5)
-    val Outline = Color(0xFF2C2C2C)
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
