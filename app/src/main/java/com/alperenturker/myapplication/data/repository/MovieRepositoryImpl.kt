@@ -4,7 +4,7 @@ import com.alperenturker.myapplication.data.remote.MovieApi
 import com.alperenturker.myapplication.data.remote.dto.MovieDetailDto
 import com.alperenturker.myapplication.data.remote.dto.MoviesDto
 import com.alperenturker.myapplication.domain.repository.MovieRepository
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val api : MovieApi) : MovieRepository {
     override suspend fun getMovies(search: String): MoviesDto {

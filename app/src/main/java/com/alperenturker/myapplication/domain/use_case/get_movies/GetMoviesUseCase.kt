@@ -4,11 +4,11 @@ import com.alperenturker.myapplication.data.remote.dto.toMovieList
 import com.alperenturker.myapplication.domain.model.Movie
 import com.alperenturker.myapplication.domain.repository.MovieRepository
 import com.alperenturker.myapplication.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
-import java.io.IOError
+import java.io.IOException
 
 class GetMoviesUseCase @Inject constructor(private val repository: MovieRepository) {
 
@@ -21,7 +21,7 @@ class GetMoviesUseCase @Inject constructor(private val repository: MovieReposito
             } else {
                 emit(Resource.Error("Movie not found"))
             }
-        } catch (e: IOError) {
+        } catch (e: IOException) {
             emit(Resource.Error("No internet connection"))
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "Error"))
