@@ -1,6 +1,8 @@
 package com.alperenturker.data.di
 
+import com.alperenturker.data.repository.BookmarkRepositoryImpl
 import com.alperenturker.data.repository.MovieRepositoryImpl
+import com.alperenturker.domain.repository.BookmarkRepository
 import com.alperenturker.domain.repository.MovieRepository
 import dagger.Binds
 import dagger.Module
@@ -13,6 +15,10 @@ import javax.inject.Singleton
 abstract class BindModule {
     @Binds @Singleton
     abstract fun bindMovieRepository(impl: MovieRepositoryImpl): MovieRepository
+
+    @Binds @Singleton
+    abstract fun bindBookmarkRepository(impl: BookmarkRepositoryImpl): BookmarkRepository
+
 
 }
 

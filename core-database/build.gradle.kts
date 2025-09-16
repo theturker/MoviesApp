@@ -1,17 +1,19 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+
+    // Bu modülde @Module/@Provides kullandığın için:
     alias(libs.plugins.hilt)
+    // Room ve Hilt codegen için:
     alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.alperenturker.data"
+    namespace = "com.alperenturker.core.database"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -35,21 +37,21 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":core-common"))
-    implementation(project(":core-network"))
-    implementation(project(":core-database"))
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
+    // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    // Diğer bağımlılıklar
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

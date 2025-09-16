@@ -6,5 +6,6 @@ import com.alperenturker.domain.model.MovieDetail
 data class MovieDetailState(
     val isLoading: Boolean = false,
     val movie: MovieDetail? = null,
-    val error: String = ""
+    val error: String = "",
+    val isBookmarked: Boolean = false
 )

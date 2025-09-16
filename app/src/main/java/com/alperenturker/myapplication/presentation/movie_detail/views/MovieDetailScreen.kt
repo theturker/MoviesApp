@@ -27,6 +27,8 @@ import com.alperenturker.myapplication.presentation.movie_detail.MovieDetailView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AddCircle
 
 private object Dark {
@@ -60,6 +62,18 @@ fun MovieDetailScreen(
                                 contentDescription = "Back",
                                 tint = Dark.OnBg
                             )
+                        }
+                    }
+                },
+                actions = {
+                    // movie varsa göster
+                    if (state.movie != null) {
+                        IconToggleButton(
+                            checked = state.isBookmarked,            // VM’den gelecek alan
+                            onCheckedChange = { movieDetailViewModel.onToggleBookmark() }
+                        ) {
+                            val icon = if (state.isBookmarked) Icons.Filled.Star else Icons.Outlined.AddCircle
+                            Icon(icon, contentDescription = "Bookmark", tint = Dark.OnBg)
                         }
                     }
                 },
