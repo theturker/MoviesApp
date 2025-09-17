@@ -13,9 +13,10 @@ class BookmarkRepositoryImpl @Inject constructor(
 ) : BookmarkRepository {
 
     override fun observeBookmarks(): Flow<List<Movie>> =
-        dao.observeAll().map { list ->
-            list.map { it.toDomain() }
+        dao.observeAll().map {
+            it.map(BookmarkEntity::toDomain)
         }
+
 
     override suspend fun isBookmarked(imdbId: String): Boolean =
         dao.isBookmarked(imdbId) > 0

@@ -35,6 +35,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.ui.graphics.Color
 import com.alperenturker.domain.model.Movie
 
@@ -67,7 +68,22 @@ fun MovieScreen(
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = Dark.Bg,
                     titleContentColor = Dark.OnBg
-                )
+                ),
+                actions = {
+                    IconButton(
+                        onClick = {
+                            // Kendi route'unu kullan:
+                            // Screen.FavoritesScreen.route (veya Screen.BookmarksScreen.route)
+                            navController.navigate(Screen.FavoritesScreen.route)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.FavoriteBorder,
+                            contentDescription = "Favoriler",
+                            tint = Dark.OnBg
+                        )
+                    }
+                }
             )
         }
     ) { padding ->

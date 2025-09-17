@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.alperenturker.myapplication.presentation.favorites.views.FavoritesSectionScreen
 import com.alperenturker.myapplication.presentation.movie_detail.views.MovieDetailScreen
 import com.alperenturker.myapplication.presentation.movies.views.MovieScreen
 import com.alperenturker.myapplication.util.Constants.IMDB_ID
@@ -34,6 +35,16 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = Screen.MovieDetailScreen.route+"/{${IMDB_ID}}"){
                         MovieDetailScreen()
+                    }
+
+                    composable(route = Screen.FavoritesScreen.route) {
+                        FavoritesSectionScreen(
+                            onItemClick = { movie ->
+                                navController.navigate(
+                                    Screen.MovieDetailScreen.route + "/${movie.imdbID}"
+                                )
+                            }
+                        )
                     }
                 }
             }

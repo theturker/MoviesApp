@@ -9,15 +9,19 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BookmarkDao {
-    @Query("SELECT * FROM bookmarks ORDER BY title ASC")
+    @Query("SELECT * FROM bookmarks ORDER BY rowid DESC")
     fun observeAll(): Flow<List<BookmarkEntity>>
 
-    @Query("SELECT COUNT(1) FROM bookmarks WHERE imdbID = :id")
+    @Query("SELECT COUNT(*) FROM bookmarks WHERE imdbId = :id")
     suspend fun isBookmarked(id: String): Int
+
+    // Detay sayfasında ikonun canlı değişmesi için çok faydalı:
+    @Query("SELECT EXISTS(SELECT 1 FROM bookmarks WHERE imdbId = :id)")
+    fun isBookmarkedFlow(id: String): Flow<Boolean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(entity: BookmarkEntity)
 
-    @Query("DELETE FROM bookmarks WHERE imdbID = :id")
+    @Query("DELETE FROM bookmarks WHERE imdbId = :id")
     suspend fun remove(id: String)
 }
