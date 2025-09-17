@@ -3,7 +3,7 @@ package com.alperenturker.core.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "bookmarkS")
+@Entity(tableName = "bookmarks")
 data class BookmarkEntity(
     @PrimaryKey val imdbId: String,
     val title: String,

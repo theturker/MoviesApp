@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.alperenturker.core.database.dao.BookmarkDao
 import com.alperenturker.core.database.entity.BookmarkEntity
 
-@Database(entities = [BookmarkEntity::class], version = 1, exportSchema = false)
+@Database(entities = [BookmarkEntity::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
 }
