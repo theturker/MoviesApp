@@ -4,6 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.perf)
+
 }
 
 android {
@@ -22,6 +26,7 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("boolean", "PERF_ENABLED", "true")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -38,6 +43,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -72,6 +78,7 @@ dependencies {
     // Hilt (+KSP)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
     // Eğer Hilt Worker/Navigation kullanacaksan:
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.work)
@@ -89,7 +96,13 @@ dependencies {
     // Image
     implementation(libs.coil.compose)
 
-    // Tests (senin mevcutların)
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.perf.ktx)
+    implementation(libs.firebase.crashlytics.ktx) // eklendi
+
+    // Mevcutlar
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

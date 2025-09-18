@@ -8,13 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.alperenturker.myapplication.presentation.favorites.views.FavoritesSectionScreen
-import com.alperenturker.myapplication.presentation.movie_detail.views.MovieDetailScreen
-import com.alperenturker.myapplication.presentation.movies.views.MovieScreen
-import com.alperenturker.myapplication.util.Constants.IMDB_ID
+import com.alperenturker.myapplication.presentation.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,29 +17,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ){
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = Screen.MovieScreen.route){
-                    composable(route = Screen.MovieScreen.route){
-                        MovieScreen(navController = navController)
-                    }
-
-                    composable(route = Screen.MovieDetailScreen.route+"/{${IMDB_ID}}"){
-                        MovieDetailScreen()
-                    }
-
-                    composable(route = Screen.FavoritesScreen.route) {
-                        FavoritesSectionScreen(
-                            onItemClick = { movie ->
-                                navController.navigate(
-                                    Screen.MovieDetailScreen.route + "/${movie.imdbID}"
-                                )
-                            }
-                        )
-                    }
+            MaterialTheme {
+                Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    AppNavHost()
                 }
             }
         }

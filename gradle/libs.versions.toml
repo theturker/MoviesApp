@@ -24,7 +24,11 @@ ksp = "2.2.20-RC2-2.0.2"
 appcompat = "1.6.1"
 material = "1.10.0"
 jetbrainsKotlinJvm = "2.2.10"
-room = "2.8.0"   # stabil
+room = "2.8.0"
+googleServices = "4.4.3"
+firebaseBom = "33.6.0"
+firebaseCrashlyticsGradle = "3.0.2"
+firebasePerfPlugin = "2.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -82,6 +86,14 @@ room-runtime  = { group = "androidx.room", name = "room-runtime",  version.ref =
 room-ktx      = { group = "androidx.room", name = "room-ktx",      version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
+# Firebase
+firebase-bom              = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics-ktx    = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-perf-ktx         = { module = "com.google.firebase:firebase-perf-ktx" }
+firebase-crashlytics-ktx  = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -90,3 +102,6 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
+firebase-perf     = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "487395643237",
+    "project_id": "movieapp-86469",
+    "storage_bucket": "movieapp-86469.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487395643237:android:2762140d36135720eb9b8c",
+        "android_client_info": {
+          "package_name": "com.alperenturker.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmFQWXeiyI2qyCWDKgRpJI2gOBveCdFMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

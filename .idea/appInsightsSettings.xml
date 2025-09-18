@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.alperenturker.myapplication" />
+                  <option name="mobileSdkAppId" value="1:487395643237:android:2762140d36135720eb9b8c" />
+                  <option name="projectId" value="movieapp-86469" />
+                  <option name="projectNumber" value="487395643237" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
