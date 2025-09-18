@@ -6,13 +6,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
+
     @Provides
     @Singleton
-    fun provideMovieApi(retrofit: Retrofit): MovieApi =
-        retrofit.create(MovieApi::class.java)
+    fun provideMovieApi(
+        @Named("movie") retrofit: Retrofit
+    ): MovieApi = retrofit.create(MovieApi::class.java)
 }

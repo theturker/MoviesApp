@@ -14,6 +14,9 @@ android {
         buildConfigField("String", "BASE_URL", "\"https://www.omdbapi.com/\"")
         val omdbKey = (project.findProperty("OMDB_API_KEY") as String?) ?: ""
         buildConfigField("String", "OMDB_API_KEY", "\"$omdbKey\"")
+        // BuildConfig.GROQ_API_KEY --> local.properties'ten
+        val groqKey = project.findProperty("GROQ_API_KEY") as String? ?: ""
+        buildConfigField("String", "GROQ_API_KEY", "\"$groqKey\"")
     }
 
     buildFeatures { buildConfig = true }   // <— BU ŞART

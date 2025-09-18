@@ -14,39 +14,23 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
 import com.alperenturker.myapplication.presentation.Screen
 import com.alperenturker.myapplication.presentation.movies.MoviesEvent
 import com.alperenturker.myapplication.presentation.movies.MoviesViewModel
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.ui.graphics.Color
-import com.alperenturker.domain.model.Movie
+import androidx.compose.material.icons.outlined.MailOutline
+import com.alperenturker.core.ui.components.PosterSkeleton
+import com.alperenturker.core.ui.components.PosterTile
+import com.alperenturker.myapplication.presentation.ai.AiViewModel
+import com.alperenturker.myapplication.presentation.ai.views.AiBottomSheet
+import com.alperenturker.myapplication.presentation.ui.theme.Dark
 
-private object Dark {
-    val Bg = Color(0xFF000000)
-    val Surface = Color(0xFF0E0E0E)
-    val Surface2 = Color(0xFF161616)
-    val OnBg = Color(0xFFEDEDED)
-    val OnDim = Color(0xFFB5B5B5)
-    val Outline = Color(0xFF2C2C2C)
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,6 +43,10 @@ fun MovieScreen(
     val gridState = rememberLazyGridState()
     val movies = remember(state.movies) { state.movies.distinctBy { it.imdbID } }
 
+    // AI
+    val aiVm = hiltViewModel<AiViewModel>()
+    var aiOpen by remember { mutableStateOf(false) }
+
     Scaffold(
         containerColor = Dark.Bg,
         contentColor = Dark.OnBg,
@@ -70,16 +58,21 @@ fun MovieScreen(
                     titleContentColor = Dark.OnBg
                 ),
                 actions = {
+                    // Favoriler
                     IconButton(
-                        onClick = {
-                            // Kendi route'unu kullan:
-                            // Screen.FavoritesScreen.route (veya Screen.BookmarksScreen.route)
-                            navController.navigate(Screen.FavoritesScreen.route)
-                        }
+                        onClick = { navController.navigate(Screen.FavoritesScreen.route) }
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.FavoriteBorder,
                             contentDescription = "Favoriler",
+                            tint = Dark.OnBg
+                        )
+                    }
+                    // AI Öneri
+                    IconButton(onClick = { aiOpen = true }) {
+                        Icon(
+                            imageVector = Icons.Outlined.MailOutline, // ya da TipsAndUpdates
+                            contentDescription = "AI Öneri",
                             tint = Dark.OnBg
                         )
                     }
@@ -111,7 +104,7 @@ fun MovieScreen(
 
             Spacer(Modifier.height(4.dp))
 
-            // Grid 3 sütun poster
+            // Grid
             if (movies.isEmpty() && !state.isLoading) {
                 EmptyView(
                     text = if (query.isBlank()) "Popüler filmleri aratın." else "Sonuç bulunamadı."
@@ -125,38 +118,52 @@ fun MovieScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(
-                        items = movies,
-                        key = { it.imdbID }
-                    ) { movie ->
-                        MoviePosterCard(
-                            movie = movie,
+                    items(items = movies, key = { it.imdbID }) { movie ->
+                        PosterTile(
+                            imageUrl = movie.Poster,
+                            contentDescription = movie.Title,
                             onClick = {
-                                navController.navigate(
-                                    Screen.MovieDetailScreen.route + "/${movie.imdbID}"
-                                )
-                            }
+                                navController.navigate(Screen.MovieDetailScreen.route + "/${movie.imdbID}")
+                            },
+                            overlay = {} // gridde ekstra overlay yok
                         )
                     }
-
-                    // Yüklenirken 9 adet shimmer
                     if (state.isLoading && movies.isEmpty()) {
                         items(9) {
-                            PosterSkeleton()
+                            PosterSkeleton(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(2f / 3f)
+                            )
                         }
                     }
                 }
             }
         }
 
-        // Orta ekranda yükleme (liste doluysa göstermiyoruz)
         if (state.isLoading && movies.isNotEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = Dark.OnBg, trackColor = Dark.Surface2)
             }
         }
+
+        /* --- AI BottomSheet --- */
+        if (aiOpen) {
+            AiBottomSheet(
+                initialQuery = query,
+                vm = aiVm,
+                onDismiss = { aiOpen = false },
+                onUseSuggestion = { title ->
+                    // AI önerilen başlıkla mevcut listeyi arat
+                    query = title
+                    viewModel.onEvent(MoviesEvent.Search(title))
+                    aiOpen = false
+                }
+            )
+        }
     }
 }
+
 
 @Composable
 private fun SearchField(
@@ -195,65 +202,6 @@ private fun SearchField(
             unfocusedTextColor = Dark.OnBg
         ),
         modifier = modifier
-    )
-}
-
-@Composable
-private fun MoviePosterCard(
-    movie: Movie,
-    onClick: () -> Unit,
-) {
-    val shape = RoundedCornerShape(14.dp)
-    ElevatedCard(
-        onClick = onClick,
-        shape = shape,
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = Dark.Surface
-        ),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        // Sadece poster – 2:3 oran
-        SubcomposeAsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(movie.Poster)
-                .crossfade(true)
-                .build(),
-            contentDescription = movie.Title,
-            contentScale = ContentScale.Crop,
-            loading = { PosterSkeleton() },
-            modifier = Modifier
-                .aspectRatio(2f / 3f)
-                .clip(shape)
-        )
-    }
-}
-
-@Composable
-private fun PosterSkeleton() {
-    val base = Dark.Surface2
-    val highlight = Color(0xFF232323)
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val xOffset by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = LinearEasing)
-        ),
-        label = "shimmerX"
-    )
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(14.dp))
-            .aspectRatio(2f / 3f)
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(base, highlight, base),
-                    start = Offset(xOffset - 600f, 0f),
-                    end = Offset(xOffset, 0f)
-                )
-            )
     )
 }
 

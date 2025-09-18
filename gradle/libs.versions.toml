@@ -20,7 +20,7 @@ work = "2.10.3"
 
 hilt = "2.57.1"
 androidxHilt = "1.2.0"
-ksp = "2.2.20-RC2-2.0.2"
+ksp = "2.2.10-RC2-2.0.2"
 appcompat = "1.6.1"
 material = "1.10.0"
 jetbrainsKotlinJvm = "2.2.10"
@@ -29,6 +29,8 @@ googleServices = "4.4.3"
 firebaseBom = "33.6.0"
 firebaseCrashlyticsGradle = "3.0.2"
 firebasePerfPlugin = "2.0.1"
+runtime = "1.9.1"
+foundation = "1.9.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -91,6 +93,8 @@ firebase-bom              = { module = "com.google.firebase:firebase-bom", versi
 firebase-analytics-ktx    = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-perf-ktx         = { module = "com.google.firebase:firebase-perf-ktx" }
 firebase-crashlytics-ktx  = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 
 

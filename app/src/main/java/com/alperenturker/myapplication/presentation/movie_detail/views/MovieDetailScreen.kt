@@ -30,14 +30,8 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AddCircle
+import com.alperenturker.myapplication.presentation.ui.theme.Dark
 
-private object Dark {
-    val Bg = Color(0xFF000000)
-    val Surface = Color(0xFF0E0E0E)
-    val Surface2 = Color(0xFF161616)
-    val OnBg = Color(0xFFEDEDED)
-    val OnDim = Color(0xFFB5B5B5)
-}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable

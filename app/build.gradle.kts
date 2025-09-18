@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-network"))
     implementation(project(":data"))
+    implementation(project(":core-ui"))
 
     // Compose core
     implementation(platform(libs.androidx.compose.bom))
@@ -77,6 +78,7 @@ dependencies {
 
     // Hilt (+KSP)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.foundation)
     ksp(libs.hilt.compiler)
 
     // Eğer Hilt Worker/Navigation kullanacaksan:
@@ -100,7 +102,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.firebase.perf.ktx)
-    implementation(libs.firebase.crashlytics.ktx) // eklendi
+    implementation(libs.firebase.crashlytics.ktx)
 
     // Mevcutlar
     testImplementation(libs.junit)
