@@ -1,8 +1,10 @@
 package com.alperenturker.myapplication.presentation.ai.views
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,10 +15,13 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alperenturker.myapplication.presentation.ai.AiViewModel
-import com.alperenturker.myapplication.presentation.common.InfoTooltip
 import com.alperenturker.myapplication.presentation.ui.theme.Dark
 
 
@@ -56,7 +60,6 @@ fun AiBottomSheet(
     var yearRange by remember { mutableStateOf<String?>(null) }
     var imdbThreshold by remember { mutableStateOf<String?>(null) }
     var pace by remember { mutableStateOf<String?>(null) }
-    var preferHiddenGems by remember { mutableStateOf(true) }
     var count by remember { mutableStateOf("5") }
     var extraNote by remember {
         // opsiyonel serbest metin
@@ -81,97 +84,118 @@ fun AiBottomSheet(
             Text("AI Film Önerileri", style = MaterialTheme.typography.titleMedium, color = Dark.OnBg)
 
             // 1) Tür (tek seçim)
-            DropdownField(
-                label = "Tür / Konu",
-                options = genreOptions,
-                value = primaryGenre,
-                onSelected = { primaryGenre = it }
-            )
+            SectionCard("Tür / Konu") {
+                DropdownField(
+                    label = "Tür / Konu seçin",
+                    options = genreOptions,
+                    value = primaryGenre,
+                    onSelected = { primaryGenre = it }
+                )
+            }
 
             // 2) Ek türler (çoklu)
-            Text("Ek türler (opsiyonel)", style = MaterialTheme.typography.labelLarge, color = Dark.OnDim)
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                genreOptions.forEach { g ->
-                    val selected = g in extraGenres
-                    FilterChip(
-                        selected = selected,
-                        onClick = {
-                            extraGenres = if (selected) extraGenres - g else extraGenres + g
-                        },
-                        label = { Text(g) },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = Dark.Surface2,
-                            labelColor = Dark.OnBg,
-                            selectedContainerColor = Dark.Surface2,
-                            selectedLabelColor = Dark.OnBg
-                        ),
-                        border = FilterChipDefaults.filterChipBorder(
-                            enabled = true,
-                            selected = selected
+            SectionCard("Ek Türler") {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    genreOptions.forEach { g ->
+                        val selected = g in extraGenres
+                        FilterChip(
+                            selected = selected,
+                            onClick = {
+                                extraGenres = if (selected) extraGenres - g else extraGenres + g
+                            },
+                            label = { Text(g) },
+                            colors = FilterChipDefaults.filterChipColors(
+                                containerColor = Dark.Surface2,
+                                labelColor = Dark.OnBg,
+                                selectedContainerColor = Dark.Surface2,
+                                selectedLabelColor = Dark.OnBg
+                            ),
+                            border = FilterChipDefaults.filterChipBorder(
+                                enabled = true,
+                                selected = selected
+                            )
                         )
-                    )
+                    }
                 }
             }
 
+
             // 3) Yıl aralığı
-            DropdownField(
-                label = "Yıl aralığı",
-                options = yearOptions,
-                value = yearRange,
-                onSelected = { yearRange = it }
-            )
+            SectionCard("Yıl Aralığı") {
+                DropdownField(
+                    label = "Yıl aralığı seçin",
+                    options = yearOptions,
+                    value = yearRange,
+                    onSelected = { yearRange = it }
+                )
+            }
 
             // 4) IMDb eşiği
-            DropdownField(
-                label = "IMDb puanı (en az)",
-                options = ratingOptions,
-                value = imdbThreshold,
-                onSelected = { imdbThreshold = it }
-            )
+            SectionCard("IMDb Eşiği") {
+                DropdownField(
+                    label = "IMDb puanı (en az)",
+                    options = ratingOptions,
+                    value = imdbThreshold,
+                    onSelected = { imdbThreshold = it }
+                )
+            }
+
 
             // 5) Tempo
-            DropdownField(
-                label = "Tempo",
-                options = paceOptions,
-                value = pace,
-                onSelected = { pace = it }
-            )
+            SectionCard("Tempo") {
+                var local by remember { mutableStateOf(pace ?: "Orta") }
+                Segmented(
+                    items = paceOptions,
+                    value = local,
+                    onValueChange = { local = it; pace = it },
+                    labelOf = { it }
+                )
+            }
 
             // 6) Kaç öneri?
-            DropdownField(
-                label = "Öneri sayısı",
-                options = countOptions,
-                value = count,
-                onSelected = { count = it }
-            )
+            SectionCard("Öneri Sayısı") {
+                var local by remember { mutableStateOf(count) }
+                Segmented(
+                    items = countOptions,
+                    value = local,
+                    onValueChange = { local = it; count = it },
+                    labelOf = { it }
+                )
+            }
 
             // 7) Gizli mücevher tercihi
-            HiddenGemsRow(
-                checked = hiddenGems,
-                onCheckedChange = { hiddenGems = it }
-            )
+            SectionCard("Tercihler") {
+                HiddenGemsRowPretty(
+                    checked = hiddenGems,
+                    onCheckedChange = { hiddenGems = it }
+                )
+            }
 
 
             // 8) Ek not (opsiyonel)
-            OutlinedTextField(
-                value = extraNote,
-                onValueChange = { extraNote = it },
-                placeholder = { Text("Opsiyonel not: ‘karanlık atmosfer, zekice kurgu’", color = Dark.OnDim) },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Dark.Surface2,
-                    unfocusedContainerColor = Dark.Surface2,
-                    focusedBorderColor = Dark.Outline,
-                    unfocusedBorderColor = Dark.Outline,
-                    focusedTextColor = Dark.OnBg,
-                    unfocusedTextColor = Dark.OnBg,
-                    cursorColor = Dark.OnBg
-                ),
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.fillMaxWidth()
-            )
+            SectionCard("Ek Not (opsiyonel)") {
+                OutlinedTextField(
+                    value = extraNote,
+                    onValueChange = { extraNote = it },
+                    placeholder = {
+                        Text("ör. karanlık atmosfer • neo-noir • yavaş tempo", color = Dark.OnDim)
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Dark.Surface2,
+                        unfocusedContainerColor = Dark.Surface2,
+                        focusedBorderColor = Dark.Outline,
+                        unfocusedBorderColor = Dark.Outline,
+                        focusedTextColor = Dark.OnBg,
+                        unfocusedTextColor = Dark.OnBg,
+                        cursorColor = Dark.OnBg
+                    ),
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
@@ -188,10 +212,31 @@ fun AiBottomSheet(
                         )
                         vm.run(prompt)
                     },
-                    enabled = !state.loading
-                ) { Text("Öneri İste") }
-
-                OutlinedButton(onClick = onDismiss) { Text("Kapat") }
+                    enabled = !state.loading,
+                    shape = RoundedCornerShape(14.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+                    modifier = Modifier
+                        .weight(2f)
+                        .height(52.dp)
+                ) {
+                    if (state.loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            color = Dark.OnBg,
+                            trackColor = Dark.Surface2,
+                            strokeWidth = 2.dp
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Text("Yükleniyor...")
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.PlayArrow,
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text("Öneri İste")
+                    }
+                }
             }
 
             when {
@@ -246,33 +291,6 @@ fun AiBottomSheet(
     }
 }
 
-@Composable
-fun HiddenGemsRow(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    label: String = "Gizli mücevherleri tercih et",
-    hint: String = "Popülerler yerine az bilinen ama kaliteli filmleri öne çıkarır."
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // ⓘ butonu
-        InfoTooltip(text = hint)
-
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f)
-        )
-
-        Spacer(Modifier.width(8.dp))
-
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
-    }
-}
-
-
 /* ---------------- Helpers ---------------- */
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -303,7 +321,7 @@ private fun DropdownField(
             ),
             shape = RoundedCornerShape(14.dp),
             modifier = Modifier
-                .menuAnchor()
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true)
                 .fillMaxWidth()
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
@@ -317,6 +335,85 @@ private fun DropdownField(
                 )
             }
         }
+    }
+}
+@Composable
+private fun SectionCard(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding( vertical = 10.dp)
+            .background(Dark.Surface2, RoundedCornerShape(16.dp))
+            .padding(14.dp)
+    ) {
+        Text(title, style = MaterialTheme.typography.titleSmall, color = Dark.OnBg)
+        Spacer(Modifier.height(8.dp))
+        content()
+    }
+}
+
+@Composable
+private fun <T> Segmented(
+    items: List<T>,
+    value: T,
+    onValueChange: (T) -> Unit,
+    labelOf: (T) -> String
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Dark.Surface2, RoundedCornerShape(12.dp))
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        items.forEach { item ->
+            val selected = item == value
+            Surface(
+                color = if (selected) Dark.Surface else Color.Transparent,
+                shape = RoundedCornerShape(10.dp),
+                tonalElevation = if (selected) 2.dp else 0.dp,
+                modifier = Modifier.weight(1f)
+            ) {
+                TextButton(
+                    onClick = { onValueChange(item) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        labelOf(item),
+                        color = if (selected) Dark.OnBg else Dark.OnDim,
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HiddenGemsRowPretty(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        AssistChip(
+            onClick = { onCheckedChange(!checked) },
+            label = { Text("Gizli Mücevherler") },
+            leadingIcon = { Text("💎") },
+            colors = AssistChipDefaults.assistChipColors(
+                containerColor = if (checked) Dark.Surface else Dark.Surface2,
+                labelColor = if (checked) Dark.OnBg else Dark.OnDim
+            )
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            "Popüler yerine az bilinen kaliteli yapımları öne çıkar.",
+            color = Dark.OnDim,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.weight(1f)
+        )
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 

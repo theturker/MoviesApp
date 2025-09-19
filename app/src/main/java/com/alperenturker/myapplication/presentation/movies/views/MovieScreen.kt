@@ -25,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.MailOutline
+import com.alperenturker.core.ui.components.BottomFadeOverlay
 import com.alperenturker.core.ui.components.PosterSkeleton
 import com.alperenturker.core.ui.components.PosterTile
 import com.alperenturker.myapplication.presentation.ai.AiViewModel
@@ -111,7 +112,7 @@ fun MovieScreen(
                 )
             } else {
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
+                    columns = GridCells.Adaptive(minSize = 140.dp), // 2 sütun telefon, 3+ tablet
                     state = gridState,
                     contentPadding = PaddingValues(12.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -122,18 +123,46 @@ fun MovieScreen(
                         PosterTile(
                             imageUrl = movie.Poster,
                             contentDescription = movie.Title,
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(18.dp),            // biraz daha yumuşak köşe
                             onClick = {
                                 navController.navigate(Screen.MovieDetailScreen.route + "/${movie.imdbID}")
                             },
-                            overlay = {} // gridde ekstra overlay yok
+                            overlay = {
+                                // 1) alttan koyulaşan fade
+                                BottomFadeOverlay(startY = 220f)
+
+                                // 2) başlık + yıl (sol altta)
+                                androidx.compose.foundation.layout.Column(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomStart)
+                                        .padding(10.dp)
+                                ) {
+                                    androidx.compose.material3.Text(
+                                        text = movie.Title,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Dark.OnBg,
+                                        maxLines = 2,
+                                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                                    )
+                                    androidx.compose.foundation.layout.Spacer(Modifier.height(2.dp))
+                                    androidx.compose.material3.Text(
+                                        text = movie.Year ?: "",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = Dark.OnDim
+                                    )
+                                }
+                            }
                         )
                     }
+
                     if (state.isLoading && movies.isEmpty()) {
-                        items(9) {
+                        items(6) { // 2x3 iskelet
                             PosterSkeleton(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .aspectRatio(2f / 3f)
+                                    .aspectRatio(2f / 3f),
+                                shape = RoundedCornerShape(18.dp)
                             )
                         }
                     }
